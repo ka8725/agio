@@ -26,19 +26,19 @@ Agio::Process.new(filter).run
 
 1. Только для юр. лиц и индивидуальных предпринимателей Республики Беларусь;
 1. Протестировано только на МТБанк в системе "Электронные платежи (клиент) v 2.61.45.00";
-1. размер обязательной продажи выставлен как константа и равен 10%.
+1. Размер обязательной продажи выставлен как константа и равен 10%;
+1. Предполагается, что все поступления валюты в USD.
 
-## Development
+## Разработка
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+После клонирования репозитория, установите зависимости с помощью команды `bin/setup`. Для запуска тестов используйте команду `rate test`. Также возможно проверить код в интерактивной среде командой `bin/console`.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-## Contributing
+## Соучастие
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ka8725/agio. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+На данный момент использование данных скриптов строго лимитировано и предназначено для использования ограниченным кругом лиц из-за множестка ограничений (см. выше). Так что, любые замечания и предложения по улучшению проекта приветствуются и поощряются. Все пожелания и изменения кода отсылайте посредством GitHub: https://github.com/ka8725/agio.
 
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Это проект с открытым исходным кодом под лицензией [MIT](http://opensource.org/licenses/MIT).
