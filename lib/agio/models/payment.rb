@@ -18,6 +18,10 @@ module Agio
       (amount * compulsory_sale).round(2)
     end
 
+    def gross
+      amount * rate
+    end
+
     def to_s
       "#{number}: #{date} #{amount.inspect} #{rate.inspect} #{compulsory_amount.inspect} #{free_amount.inspect}"
     end

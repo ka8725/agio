@@ -1,8 +1,13 @@
 require_relative './../models/payment'
+require 'forwardable'
 
 module Agio
   class PaymentsRepo
+    extend Forwardable
+
     attr_reader :collection
+
+    def_delegator :collection, :each
 
     def initialize
       @collection = []

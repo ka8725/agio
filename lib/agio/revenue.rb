@@ -1,15 +1,19 @@
 module Agio
   class Revenue
+    attr_reader :payments_collection
+    attr_reader :compulsory_sales_collection
+    attr_reader :free_sales_collection
+
     def initialize(payments_repo, compulsory_sales_repo, free_sales_repo, start_date: nil, end_date: nil)
       filter = {start_date: start_date, end_date: end_date}
-      @payments = filtered_collection(payments_repo, filter)
-      @compulsory_sales = filtered_collection(compulsory_sales_repo, filter)
-      @free_sales = filtered_collection(free_sales_repo, filter)
+      @payments_collection = filtered_collection(payments_repo, filter)
+      @compulsory_sales_collection = filtered_collection(compulsory_sales_repo, filter)
+      @free_sales_collection = filtered_collection(free_sales_repo, filter)
     end
 
     def free_sales
-      p_stack = @payments.reverse
-      s_stack = @free_sales.reverse
+      p_stack = @payments_collection.reverse
+      s_stack = @free_sales_collection.reverse
 
       return 0 if p_stack.empty? || s_stack.empty?
 
@@ -18,8 +22,8 @@ module Agio
     end
 
     def compulsory_sales
-      p_stack = @payments.reverse
-      s_stack = @compulsory_sales.reverse
+      p_stack = @payments_collection.reverse
+      s_stack = @compulsory_sales_collection.reverse
 
       return 0 if p_stack.empty? || s_stack.empty?
 
@@ -28,7 +32,19 @@ module Agio
     end
 
     def sales
-      free_sales + compulsory_sales
+      (free_sales + compulsory_sales).round(2)
+    end
+
+    def gross
+      payments_gross + sales
+    end
+
+    def payments_gross
+      (@payments_collection.sum(&:gross)).round(2)
+    end
+
+    def fee(percent)
+      (gross * percent / 100.0).round(2)
     end
 
     private

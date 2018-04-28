@@ -15,11 +15,12 @@ module Agio
 
     def payments
       File.open(PAYMENTS_FILE).read.split(ROW_SEPARATOR).map do |payment|
+        date = Date.parse(extract(payment, :DatePostup))
         {
-          date: Date.parse(extract(payment, :DatePostup)),
+          date: date,
           amount: BigDecimal(extract(payment, :SumPostup)),
           number: Integer(extract(payment, :Num)),
-          rate: extract(payment, :DatePostup)
+          rate: rate_on(date)
         }
       end
     end
