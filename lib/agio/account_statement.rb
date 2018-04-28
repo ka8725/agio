@@ -7,14 +7,14 @@ module Agio
   class AccountStatement
     BASE_DIR = './bank_files'
 
-    PAYMENTS_FILE = "#{BASE_DIR}/payments.txt" # export of request #252 (converted to UTF-8)
-    COMPULSARY_SALES_FILE = "#{BASE_DIR}/compulsory_sales.txt" # export of request #400 for BYR account (converted to UTF-8)
-    FREE_SALES_FILE = "#{BASE_DIR}/free_sales.txt" # export of request #62 (converted to UTF-8)
+    PAYMENTS_FILE = 'payments.txt' # export of request #252 (converted to UTF-8)
+    COMPULSARY_SALES_FILE = 'compulsory_sales.txt' # export of request #400 for BYR account (converted to UTF-8)
+    FREE_SALES_FILE = 'free_sales.txt' # export of request #62 (converted to UTF-8)
     ROW_SEPARATOR = "###################################################\r\n"
     NBRB_URI = 'http://www.nbrb.by/API/ExRates/Rates/145?Periodicity=0&onDate=%{date}'
 
     def payments
-      File.open(PAYMENTS_FILE).read.split(ROW_SEPARATOR).map do |payment|
+      file_parts(payments_file).map do |payment|
         date = Date.parse(extract(payment, :DatePostup))
         {
           date: date,
@@ -26,7 +26,7 @@ module Agio
     end
 
     def compulsory_sales
-      reports = File.open(COMPULSARY_SALES_FILE).read.split(ROW_SEPARATOR)
+      reports = file_parts(compulsary_sales_file)
       sales = reports.flat_map do |report|
         docs = report.split(/(\^Num=\d+\^)/)[1..-1].each_slice(2).map(&:join)
         docs.grep(/\^DocID=000000001\^/)
@@ -44,7 +44,7 @@ module Agio
     end
 
     def free_sales
-      File.open(FREE_SALES_FILE).read.split(ROW_SEPARATOR).map do |sale|
+      file_parts(free_sales_file).map do |sale|
         {
           date: Date.parse(extract(sale, :DatePlt)),
           amount: BigDecimal(extract(sale, '004')),
@@ -55,6 +55,10 @@ module Agio
     end
 
     private
+
+    def file_parts(file_name)
+      File.open(file_name).read.split(ROW_SEPARATOR)
+    end
 
     def amount_from_desc(desc, reg)
       from_desc(desc, reg).sub(';', '.')
@@ -72,6 +76,18 @@ module Agio
       uri = URI(format(NBRB_URI, date: date))
       response = Net::HTTP.get(uri)
       JSON.parse(response)['Cur_OfficialRate']
+    end
+
+    def compulsary_sales_file
+      "#{BASE_DIR}/#{COMPULSARY_SALES_FILE}"
+    end
+
+    def payments_file
+      "#{BASE_DIR}/#{PAYMENTS_FILE}"
+    end
+
+    def free_sales_file
+      "#{BASE_DIR}/#{FREE_SALES_FILE}"
     end
   end
 end
