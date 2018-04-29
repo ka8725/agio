@@ -17,7 +17,7 @@
 require 'agio'
 
 filter = {start_date: Date.parse('2018-01-03'), end_date: Date.parse('2018-03-31')}
-Agio::Process.new(filter).run
+Agio::Report.new(filter).generate
 ```
 
 Вывод производится в текстовом виде в консоль.

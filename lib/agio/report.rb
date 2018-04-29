@@ -30,7 +30,7 @@ module Agio
       @free_sales_repo = SalesRepo.new
     end
 
-    def run
+    def generate
       @account_statement.payments.each { |data| @payments_repo.push(data) }
       @account_statement.compulsory_sales.each { |data| @compulsory_sales_repo.push(data) }
       @account_statement.free_sales.each { |data| @free_sales_repo.push(data) }
