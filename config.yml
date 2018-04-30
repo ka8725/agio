@@ -1,0 +1,6 @@
+:bank_files:
+  :encoding: CP866
+  :directory_path: ./bank_files
+  :payments_file_name: payments.txt
+  :free_sales_file_name: free_sales.txt
+  :compulsory_sales_file_name: compulsory_sales.txt

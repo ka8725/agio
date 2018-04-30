@@ -2,14 +2,10 @@ require 'date'
 require 'json'
 require 'bigdecimal'
 require 'net/http'
+require_relative './config'
 
 module Agio
   class AccountStatement
-    BASE_DIR = './bank_files'
-
-    PAYMENTS_FILE = 'payments.txt' # export of request #252 (converted to UTF-8)
-    COMPULSARY_SALES_FILE = 'compulsory_sales.txt' # export of request #400 for BYR account (converted to UTF-8)
-    FREE_SALES_FILE = 'free_sales.txt' # export of request #62 (converted to UTF-8)
     ROW_SEPARATOR = "###################################################\r\n"
     NBRB_URI = 'http://www.nbrb.by/API/ExRates/Rates/145?Periodicity=0&onDate=%{date}'
 
@@ -57,7 +53,7 @@ module Agio
     private
 
     def file_parts(file_name)
-      File.open(file_name).read.split(ROW_SEPARATOR)
+      File.open(file_name, encoding: Config.bank_files.encoding).read.encode('UTF-8').split(ROW_SEPARATOR)
     end
 
     def amount_from_desc(desc, reg)
@@ -78,16 +74,19 @@ module Agio
       JSON.parse(response)['Cur_OfficialRate']
     end
 
+    # export of request #400
     def compulsary_sales_file
-      "#{BASE_DIR}/#{COMPULSARY_SALES_FILE}"
+      File.join(Config.bank_files.directory_path, Config.bank_files.compulsory_sales_file_name)
     end
 
+    # export of request #252
     def payments_file
-      "#{BASE_DIR}/#{PAYMENTS_FILE}"
+      File.join(Config.bank_files.directory_path, Config.bank_files.payments_file_name)
     end
 
+    # export of request #62
     def free_sales_file
-      "#{BASE_DIR}/#{FREE_SALES_FILE}"
+      File.join(Config.bank_files.directory_path, Config.bank_files.free_sales_file_name)
     end
   end
 end

@@ -10,3 +10,4 @@
 /bank_files
 local.rb
 *.DS_Store
+config.local.yml
